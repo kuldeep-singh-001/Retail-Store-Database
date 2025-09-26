@@ -1,39 +1,56 @@
+--**  All Tables  **--
+select * from Customers;
+select * from Products;
+select * from Orders;
+select * from OrderItems;
+
+
+
 -- 1. Count total customers
 SELECT COUNT(*) AS total_customers
 FROM Customers;
 
--- 2. Count orders per customer
-SELECT c.first_name || ' ' || c.last_name AS customer, COUNT(o.order_id) AS total_orders
-FROM Customers c
-LEFT JOIN Orders o ON c.customer_id = o.customer_id
-GROUP BY c.customer_id;
+-- 2. Customers grouped by city
+SELECT city, COUNT(*) AS total_customers
+FROM Customers
+GROUP BY city;
 
--- 3. Total sales (revenue)
-SELECT SUM(oi.quantity * p.price) AS total_revenue
-FROM OrderItems oi
-JOIN Products p ON oi.product_id = p.product_id;
+-- 3. Count total products
+SELECT COUNT(*) AS total_products
+FROM Products;
 
--- 4. Average order value
-SELECT AVG(order_total) AS avg_order_value
-FROM (
-    SELECT o.order_id, SUM(oi.quantity * p.price) AS order_total
-    FROM Orders o
-    JOIN OrderItems oi ON o.order_id = oi.order_id
-    JOIN Products p ON oi.product_id = p.product_id
-    GROUP BY o.order_id
-);
+-- 4. Average price per product category
+SELECT category, AVG(price) AS avg_price
+FROM Products
+GROUP BY category;
 
--- 5. Revenue by category
-SELECT p.category, SUM(oi.quantity * p.price) AS category_revenue
-FROM OrderItems oi
-JOIN Products p ON oi.product_id = p.product_id
-GROUP BY p.category;
+-- 5. Most expensive product in each category
+SELECT category, MAX(price) AS max_price
+FROM Products
+GROUP BY category;
 
--- 6. Customers who spent more than $1500
-SELECT c.first_name || ' ' || c.last_name AS customer, SUM(oi.quantity * p.price) AS total_spent
-FROM Customers c
-JOIN Orders o ON c.customer_id = o.customer_id
-JOIN OrderItems oi ON o.order_id = oi.order_id
-JOIN Products p ON oi.product_id = p.product_id
-GROUP BY c.customer_id
-HAVING total_spent > 1500;
+-- 6. Count total orders
+SELECT COUNT(*) AS total_orders
+FROM Orders;
+
+-- 7. Orders per day
+SELECT order_date, COUNT(*) AS total_orders
+FROM Orders
+GROUP BY order_date;
+
+-- 8. Customers who have more than 1 order (using HAVING)
+SELECT customer_id, COUNT(order_id) AS total_orders
+FROM Orders
+GROUP BY customer_id
+HAVING COUNT(order_id) > 1;
+
+-- 9. Count of order items per order
+SELECT order_id, COUNT(order_item_id) AS total_items
+FROM OrderItems
+GROUP BY order_id;
+
+-- 10. Orders where more than 2 different products were bought
+SELECT order_id, COUNT(product_id) AS distinct_products
+FROM OrderItems
+GROUP BY order_id
+HAVING COUNT(product_id) > 2;
