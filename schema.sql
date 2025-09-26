@@ -1,7 +1,7 @@
 PRAGMA foreign_keys = ON;
 
 -- Customers
-CREATE TABLE IF NOT EXISTS Customers (
+CREATE TABLE Customers (
     customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Customers (
 );
 
 -- Products
-CREATE TABLE IF NOT EXISTS Products (
+CREATE TABLE Products (
     product_id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_name TEXT NOT NULL,
     category TEXT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Products (
 );
 
 -- Orders
-CREATE TABLE IF NOT EXISTS Orders (
+CREATE TABLE Orders (
     order_id INTEGER PRIMARY KEY AUTOINCREMENT,
     customer_id INTEGER NOT NULL,
     order_date TEXT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Orders (
 );
 
 -- Order Items (many-to-many relationship between Orders and Products)
-CREATE TABLE IF NOT EXISTS OrderItems (
+CREATE TABLE OrderItems (
     order_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
@@ -35,3 +35,4 @@ CREATE TABLE IF NOT EXISTS OrderItems (
     FOREIGN KEY (order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 );
+
