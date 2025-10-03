@@ -1,4 +1,4 @@
---**  All Tables  **--
+-- **  All Tables  **--
 select * from Customers;
 select * from Products;
 select * from Orders;
@@ -54,3 +54,4 @@ SELECT order_id, COUNT(product_id) AS distinct_products
 FROM OrderItems
 GROUP BY order_id
 HAVING COUNT(product_id) > 2;
+
